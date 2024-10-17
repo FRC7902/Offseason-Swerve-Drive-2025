@@ -4,16 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -39,8 +38,8 @@ public class RobotContainer {
   // left stick controls translation
   // right stick controls the desired angle NOT angular rotation
   Command driveFieldOrientedDirectAngle = m_swerveSubsystem.driveCommand(
-      () -> MathUtil.applyDeadband(m_driverController.getLeftY(), 0.1), // TODO: Move deadband to constants
-      () -> MathUtil.applyDeadband(m_driverController.getLeftX(), 0.1), // TODO: Move deadband to constants
+      () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
       () -> m_driverController.getRightX(),
       () -> m_driverController.getRightY());
 
