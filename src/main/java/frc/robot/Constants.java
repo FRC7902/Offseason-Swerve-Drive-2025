@@ -15,5 +15,12 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int LEFT_X_DEADBAND = 0;
+    public static final int LEFT_Y_DEADBAND = 0;
+  }
+
+  public static class SwerveConstants {
+    public static final double kMaxSpeed = 4.5;
+    public static final double kTurnSpeed = 0;
   }
 }
