@@ -7,14 +7,26 @@ package frc.robot.subsystems;
 import java.io.File;
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import swervelib.SwerveDrive;
+import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
+import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -22,6 +34,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
+    // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
+    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8, DriveConstants.ENCODER_PPR); // TODO: Add encoder PPR value
+    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER RESOLUTION)
+    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.86, DriveConstants.ENCODER_PPR); // TODO: Add encoder PPR value
+    System.out.println("\t\"angle\": {\"factor\": " + angleConversionFactor + " },");
+    System.out.println("\t\"drive\": {\"factor\": " + driveConversionFactor + " }");
+    System.out.println("}");
+  
+    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created
+    // SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
     try {
       File directory = new File(Filesystem.getDeployDirectory(), "swerve");
@@ -30,12 +52,25 @@ public class SwerveSubsystem extends SubsystemBase {
       throw new RuntimeException(e);
     }
 
+    m_swerveDrive.setHeadingCorrection(false);
+    m_swerveDrive.setCosineCompensator(false);  // Disabled for simulation
+    m_swerveDrive.setAngularVelocityCompensation(      
+      true,
+      true,
+      0.1); // Invert if too much skew occurs as angular velocity increases
+    m_swerveDrive.setModuleEncoderAutoSynchronize(false, 3);  // Resynchronize absolute encoders and motor encoders periodically when not moving
+    
+    m_swerveDrive.pushOffsetsToEncoders();  // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+
+    setupPathPlanner();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public void setupPathPlanner(){}
 
   /**
    * Command to drive the robot using translative values and heading as a
