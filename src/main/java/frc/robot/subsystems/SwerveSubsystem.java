@@ -14,10 +14,22 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+<<<<<<< Updated upstream
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+=======
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+>>>>>>> Stashed changes
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -28,12 +40,70 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
+<<<<<<< Updated upstream
+=======
+class SwerveModule {
+  private Talon driveMotor;
+  private Talon steerMotor;
+  private SwerveModuleState currentState;
+
+  public SwerveModule(int driveMotorPort, int steeringMotorPort) {
+    driveMotor = new Talon(driveMotorPort);
+    steerMotor = new Talon(steeringMotorPort);
+    currentState = new SwerveModuleState();
+    SwerveModuleState currentState = new SwerveModuleState(1, new Rotation2d(Units.degreesToRadians(30)));
+  }
+
+public SwerveModuleState getState() {
+  return currentState;
+}
+
+public void setState(SwerveModuleState newState) {
+  currentState = newState;
+}
+
+}
+
+
+>>>>>>> Stashed changes
 public class SwerveSubsystem extends SubsystemBase {
 
   SwerveDrive m_swerveDrive;
 
+<<<<<<< Updated upstream
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
+=======
+  SwerveModule frontLeftModule = new SwerveModule(0,1);
+  SwerveModule frontRightModule = new SwerveModule(2,3);
+  SwerveModule backLeftModule = new SwerveModule(4,5);
+  SwerveModule backRightModule = new SwerveModule(6,7);
+  
+  double chassisWidth = Units.inchesToMeters(0);
+  double chassisLength = Units.inchesToMeters(0);
+
+  // Defining the locations of the wheels on the robot relative to its center
+  // Let up be [+] and left be [+]
+  Translation2d frontLeftLocation = new Translation2d(chassisLength / 2, chassisWidth / 2);
+  Translation2d frontRightLocation = new Translation2d(chassisLength / 2, -chassisWidth / 2);
+  Translation2d backLeftLocation = new Translation2d(-chassisLength / 2, chassisWidth / 2);
+  Translation2d backRightLocation = new Translation2d(-chassisLength / 2, -chassisWidth / 2);
+
+
+  // Define a kinematics object
+  // Takes ChassisSpeeds and returns SwerveModuleStates
+  SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+    frontLeftLocation,
+    frontRightLocation,
+    backLeftLocation,
+    backRightLocation
+  );
+
+  /** Creates a new SwerveSubsystem. */
+  public SwerveSubsystem() {
+
+
+>>>>>>> Stashed changes
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8, DriveConstants.ENCODER_PPR); // TODO: Add encoder PPR value
     // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER RESOLUTION)
@@ -65,9 +135,42 @@ public class SwerveSubsystem extends SubsystemBase {
     setupPathPlanner();
   }
 
+<<<<<<< Updated upstream
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+=======
+  public void setChassisSpeed(ChassisSpeeds desiredSpeeds) {
+    
+    // Get the desired states of the wheels
+    SwerveModuleState[] newStates = kinematics.toSwerveModuleStates(desiredSpeeds);
+
+    frontLeftModule.setState(newStates[0]);
+    frontRightModule.setState(newStates[1]);
+    backLeftModule.setState(newStates[2]);
+    backRightModule.setState(newStates[3]);
+
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+   
+    // FL, FR, BL, BR
+    double loggingStates[] = {
+      frontLeftModule.getState().angle.getDegrees(),
+      frontLeftModule.getState().speedMetersPerSecond,
+      frontRightModule.getState().angle.getDegrees(),
+      frontRightModule.getState().speedMetersPerSecond,
+      backLeftModule.getState().angle.getDegrees(),
+      backLeftModule.getState().speedMetersPerSecond,
+      backRightModule.getState().angle.getDegrees(),
+      backRightModule.getState().speedMetersPerSecond,
+    };
+
+
+    SmartDashboard.putNumberArray("Swerve Module States", loggingStates);
+>>>>>>> Stashed changes
   }
 
   public void setupPathPlanner(){}
@@ -125,4 +228,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public void driveFieldOriented(ChassisSpeeds velocity) {
     m_swerveDrive.driveFieldOriented(velocity);
   }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 }

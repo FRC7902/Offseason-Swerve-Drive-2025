@@ -13,6 +13,12 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+<<<<<<< Updated upstream
+=======
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+>>>>>>> Stashed changes
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,6 +38,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
 
+<<<<<<< Updated upstream
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
@@ -46,6 +53,12 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+=======
+  SwerveSubsystem m_drive = new SwerveSubsystem(m_driverController);    
+
+
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+>>>>>>> Stashed changes
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();

@@ -16,7 +16,11 @@
   },
   "encoder": {
     "type": "analog",
+<<<<<<< Updated upstream
     "id": 0,
+=======
+    "id": 2,
+>>>>>>> Stashed changes
     "canbus": null
   },
   "inverted": {
