@@ -10,6 +10,8 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +26,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   SwerveModuleState[] states;
 
+  private final StructArrayPublisher<SwerveModuleState> m_moduleStatePublisher;
+
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
 
@@ -33,6 +37,9 @@ public class SwerveSubsystem extends SubsystemBase {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+
+    m_moduleStatePublisher = NetworkTableInstance.getDefault()
+        .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
   }
 
@@ -49,6 +56,9 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("FR Speed (m/s)", states[1].speedMetersPerSecond);
     SmartDashboard.putNumber("BL Speed (m/s)", states[2].speedMetersPerSecond);
     SmartDashboard.putNumber("BR Speed (m/s)", states[3].speedMetersPerSecond);
+
+    SwerveModuleState[] states = m_swerveDrive.getStates();
+    m_moduleStatePublisher.set(states);
   }
 
   /**
