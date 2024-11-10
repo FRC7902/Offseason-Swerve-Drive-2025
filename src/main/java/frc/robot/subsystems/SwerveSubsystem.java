@@ -9,7 +9,9 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -19,6 +21,8 @@ import swervelib.parser.SwerveParser;
 public class SwerveSubsystem extends SubsystemBase {
 
   SwerveDrive m_swerveDrive;
+
+  SwerveModuleState[] states;
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
@@ -35,6 +39,16 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    states = m_swerveDrive.getStates();
+    SmartDashboard.putNumber("FL Angle (deg)", states[0].angle.getDegrees());
+    SmartDashboard.putNumber("FR Angle (deg)", states[1].angle.getDegrees());
+    SmartDashboard.putNumber("BL Angle (deg)", states[2].angle.getDegrees());
+    SmartDashboard.putNumber("BR Angle (deg)", states[3].angle.getDegrees());
+
+    SmartDashboard.putNumber("FL Speed (m/s)", states[0].speedMetersPerSecond);
+    SmartDashboard.putNumber("FR Speed (m/s)", states[1].speedMetersPerSecond);
+    SmartDashboard.putNumber("BL Speed (m/s)", states[2].speedMetersPerSecond);
+    SmartDashboard.putNumber("BR Speed (m/s)", states[3].speedMetersPerSecond);
   }
 
   /**
@@ -53,7 +67,7 @@ public class SwerveSubsystem extends SubsystemBase {
       double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
       double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
       // Make the robot move
-      driveFieldOriented(m_swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
+      driveFieldOriented(m_swerveDrive.swerveController.getTargetSpeeds(xInput * 0.1, yInput * 0.1,
           headingX.getAsDouble(),
           headingY.getAsDouble(),
           m_swerveDrive.getYaw().getRadians(),
