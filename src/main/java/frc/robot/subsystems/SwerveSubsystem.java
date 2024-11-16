@@ -121,20 +121,13 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-     * Gets the current chassis speeds of the robot.
-     * @return The current chassis speeds.
-     */
-    public ChassisSpeeds getCurrentRobotChassisSpeeds() {
-      return m_kinematics.toChassisSpeeds(getStates().ModuleStates);
-  }
-   /**
-     * Gets the current field-relative pose of the robot according to odometry.
-     * @return The current robot pose.
-     */
+  * Gets the current field-relative pose of the robot according to odometry.
+  * @return The current robot pose.
+  */
   
-  public Pose2d getRobotPose() {
-    return m_swerveDrive.getStates().Pose;
-  }
+    public Pose2d getRobotPose() {
+      return m_swerveDrive.getStates().Pose;
+    }
 
 
 
