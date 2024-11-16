@@ -1,4 +1,4 @@
-  // Copyright (c) FIRST and other WPILib contributors.
+// Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -17,27 +17,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;
-
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -136,4 +119,24 @@ public class SwerveSubsystem extends SubsystemBase {
   public void driveFieldOriented(ChassisSpeeds velocity) {
     m_swerveDrive.driveFieldOriented(velocity);
   }
+
+  /**
+     * Gets the current chassis speeds of the robot.
+     * @return The current chassis speeds.
+     */
+    public ChassisSpeeds getCurrentRobotChassisSpeeds() {
+      return m_kinematics.toChassisSpeeds(getStates().ModuleStates);
+  }
+   /**
+     * Gets the current field-relative pose of the robot according to odometry.
+     * @return The current robot pose.
+     */
+  
+  public Pose2d getRobotPose() {
+    return m_swerveDrive.getStates().Pose;
+  }
+
+
+
+
 }
