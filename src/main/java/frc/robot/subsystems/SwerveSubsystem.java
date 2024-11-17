@@ -7,6 +7,11 @@ package frc.robot.subsystems;
 import java.io.File;
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
+
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -22,9 +27,26 @@ import swervelib.parser.SwerveParser;
 
 import edu.wpi.first.math.geometry.Pose2d;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
+
 public class SwerveSubsystem extends SubsystemBase {
 
-  SwerveDrive m_swerveDrive;
+  private SwerveDrive m_swerveDrive;
 
   SwerveModuleState[] states;
 
@@ -43,6 +65,40 @@ public class SwerveSubsystem extends SubsystemBase {
     m_moduleStatePublisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
+  }
+
+  public Pose2d getPose() {
+    return m_swerveDrive.getPose();
+  }
+
+  public void resetOdometry(Pose2d initialHolonomicPose) {
+    m_swerveDrive.resetOdometry(initialHolonomicPose);
+  }
+
+  public ChassisSpeeds getRobotVelocity() {
+    return m_swerveDrive.getRobotVelocity();
+  }
+
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+    m_swerveDrive.setChassisSpeeds(chassisSpeeds);
+  }
+
+  public void initializePathPlanner() {
+      AutoBuilder.configureHolonomic(
+        this::getPose, // Provides robot pose (combination of translation and rotation)
+        this::resetOdometry, // Resets odometry (runs when auto has a starting pose)
+        this::getRobotVelocity, // Provides chassis velocity
+        this::setChassisSpeeds, // Sets robot speed 
+        new HolonomicPathFollowerConfig(
+                                        Constants.AutonConstants.TRANSLATION_PID,
+                                        Constants.AutonConstants.ANGLE_PID,
+                                        Constants.AutonConstants.MAX_MODULE_SPEED,
+                                        m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+                                        new ReplanningConfig()),
+                                        () -> {
+                                          var alliance = DriverStation.getAlliance();
+                                          return (alliance.isPresent()) ? (alliance.get() == DriverStation.Alliance.Red) : (false);},
+                                          this);
   }
 
   @Override
@@ -121,15 +177,9 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-  * Gets the current field-relative pose of the robot according to odometry.
-  * @return The current robot pose.
-  */
-  
-    public Pose2d getRobotPose() {
-      return m_swerveDrive.getStates().Pose;
-    }
-
-
-
+   * Gets the current field-relative pose of the robot according to odometry.
+   * 
+   * @return The current robot pose.
+   */
 
 }

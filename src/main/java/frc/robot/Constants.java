@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -30,4 +32,13 @@ public final class Constants {
   public static class DriveConstants {
     public static final double MAX_SPEED = Units.feetToMeters(4.5);
   }
+
+  public static class AutonConstants {
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(5, 2, 3, 5);
+    public static final PIDConstants ANGLE_PID = new PIDConstants(5, 2, 3, 5);;
+    public static final double MAX_MODULE_SPEED = 5;
+    public static final boolean isCompetition = false;
+
+  }
+
 }
