@@ -57,6 +57,8 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("BL Speed (m/s)", states[2].speedMetersPerSecond);
     SmartDashboard.putNumber("BR Speed (m/s)", states[3].speedMetersPerSecond);
 
+    SmartDashboard.putNumber("Swerve Yaw", m_swerveDrive.getGyroRotation3d().getZ());
+
     SwerveModuleState[] states = m_swerveDrive.getStates();
     m_moduleStatePublisher.set(states);
   }
@@ -74,6 +76,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
       DoubleSupplier headingY) {
     return run(() -> {
+      SmartDashboard.putNumber("Target robot angle", Math.atan2(headingX.getAsDouble(), headingY.getAsDouble()));
+
       double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
       double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
       // Make the robot move
@@ -83,6 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
           m_swerveDrive.getYaw().getRadians(),
           m_swerveDrive.getMaximumVelocity()));
     });
+
   }
 
   /**
