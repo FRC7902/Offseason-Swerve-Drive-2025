@@ -31,7 +31,6 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -39,8 +38,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 
@@ -90,15 +87,15 @@ public class SwerveSubsystem extends SubsystemBase {
         this::getRobotVelocity, // Provides chassis velocity
         this::setChassisSpeeds, // Sets robot speed 
         new HolonomicPathFollowerConfig(
-                                        Constants.AutonConstants.TRANSLATION_PID,
-                                        Constants.AutonConstants.ANGLE_PID,
-                                        Constants.AutonConstants.MAX_MODULE_SPEED,
-                                        m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-                                        new ReplanningConfig()),
-                                        () -> {
-                                          var alliance = DriverStation.getAlliance();
-                                          return (alliance.isPresent()) ? (alliance.get() == DriverStation.Alliance.Red) : (false);},
-                                          this);
+          Constants.AutonConstants.TRANSLATION_PID,
+          Constants.AutonConstants.ANGLE_PID,
+          Constants.AutonConstants.MAX_MODULE_SPEED,
+          m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+          new ReplanningConfig()),
+          () -> {
+            var alliance = DriverStation.getAlliance();
+            return (alliance.isPresent()) ? (alliance.get() == DriverStation.Alliance.Red) : (false);},
+            this);
   }
 
   @Override
