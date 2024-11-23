@@ -128,4 +128,13 @@ public class SwerveSubsystem extends SubsystemBase {
   public void drive(ChassisSpeeds velocity) {
     m_swerveDrive.drive(velocity);
   }
+
+  /**
+   * Zero the gyro, where the robot's current direction is the new front.
+   */
+  public Command zeroGyro() {
+    return run(() -> {
+      m_swerveDrive.zeroGyro();
+    });
+  }
 }

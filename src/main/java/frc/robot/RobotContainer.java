@@ -88,6 +88,10 @@ public class RobotContainer {
         driveFieldOrientedAnglularVelocity);
 
     m_driverController.povUp().toggleOnTrue(driveRobotOrientedAnglularVelocity);
+
+    // Share button -> Zero gyro
+    // NOTE: Command does not work with onTrue()
+    m_driverController.create().whileTrue(m_swerveSubsystem.zeroGyro());
   }
 
   /**
