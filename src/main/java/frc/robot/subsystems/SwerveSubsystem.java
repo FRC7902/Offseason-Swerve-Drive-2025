@@ -95,7 +95,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return Drive command.
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-      DoubleSupplier angularRotationX) {
+      DoubleSupplier angularRotationX, boolean fieldRelative) {
     return run(() -> {
       // Make the robot move
       m_swerveDrive.drive(
@@ -104,7 +104,7 @@ public class SwerveSubsystem extends SubsystemBase {
               translationY.getAsDouble() * 0.1 * m_swerveDrive
                   .getMaximumVelocity()),
           angularRotationX.getAsDouble() * 0.1 * m_swerveDrive.getMaximumAngularVelocity(),
-          true,
+          fieldRelative,
           false);
     });
   }
@@ -116,5 +116,14 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void driveFieldOriented(ChassisSpeeds velocity) {
     m_swerveDrive.driveFieldOriented(velocity);
+  }
+
+  /**
+   * Drive according to the chassis robot oriented velocity.
+   *
+   * @param velocity Robot oriented {@link ChassisSpeeds}
+   */
+  public void drive(ChassisSpeeds velocity) {
+    m_swerveDrive.drive(velocity);
   }
 }

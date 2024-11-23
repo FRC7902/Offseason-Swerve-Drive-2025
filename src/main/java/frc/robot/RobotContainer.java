@@ -52,7 +52,14 @@ public class RobotContainer {
   Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
       () -> MathUtil.applyDeadband(m_driverController.getLeftY() * -1, OperatorConstants.LEFT_Y_DEADBAND),
       () -> MathUtil.applyDeadband(m_driverController.getLeftX() * -1, OperatorConstants.LEFT_X_DEADBAND),
-      () -> m_driverController.getRightX() * -1);
+      () -> m_driverController.getRightX() * -1,
+      true);
+
+  Command driveRobotOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
+      () -> MathUtil.applyDeadband(m_driverController.getLeftY() * -1, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(m_driverController.getLeftX() * -1, OperatorConstants.LEFT_X_DEADBAND),
+      () -> m_driverController.getRightX() * -1,
+      false);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -78,7 +85,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_swerveSubsystem.setDefaultCommand(
-        driveFieldOrientedAnglularVelocity);
+        driveRobotOrientedAnglularVelocity);
   }
 
   /**
