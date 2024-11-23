@@ -85,7 +85,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_swerveSubsystem.setDefaultCommand(
-        driveRobotOrientedAnglularVelocity);
+        driveFieldOrientedAnglularVelocity);
+
+    m_driverController.povUp().toggleOnTrue(driveRobotOrientedAnglularVelocity);
   }
 
   /**
