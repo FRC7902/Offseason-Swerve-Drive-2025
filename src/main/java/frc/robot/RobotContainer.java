@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -29,7 +30,7 @@ public class RobotContainer {
   private final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = new CommandXboxController(
+  private final CommandPS5Controller m_driverController = new CommandPS5Controller(
       OperatorConstants.kDriverControllerPort);
 
   // Applies deadbands and inverts controls because joysticks
@@ -42,6 +43,16 @@ public class RobotContainer {
       () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
       () -> m_driverController.getRightX(),
       () -> m_driverController.getRightY());
+
+  // Applies deadbands and inverts controls because joysticks
+  // are back-right positive while robot
+  // controls are front-left positive
+  // left stick controls translation
+  // right stick controls the angular velocity of the robot
+  Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
+      () -> MathUtil.applyDeadband(m_driverController.getLeftY() * -1, OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(m_driverController.getLeftX() * -1, OperatorConstants.LEFT_X_DEADBAND),
+      () -> m_driverController.getRightX() * -1);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -66,18 +77,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
     m_swerveSubsystem.setDefaultCommand(
-        driveFieldOrientedDirectAngle);
-
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+        driveFieldOrientedAnglularVelocity);
   }
 
   /**
