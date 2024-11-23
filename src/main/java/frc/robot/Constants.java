@@ -23,8 +23,8 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
     // Joystick deadbands
-    public static final double LEFT_X_DEADBAND = 0.1;
-    public static final double LEFT_Y_DEADBAND = 0.1;
+    public static final double LEFT_X_DEADBAND = 0.2;
+    public static final double LEFT_Y_DEADBAND = 0.2;
   }
 
   public static class DriveConstants {
