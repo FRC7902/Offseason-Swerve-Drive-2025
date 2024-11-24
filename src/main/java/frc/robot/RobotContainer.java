@@ -87,7 +87,8 @@ public class RobotContainer {
     m_swerveSubsystem.setDefaultCommand(
         driveFieldOrientedAnglularVelocity);
 
-    m_driverController.povUp().toggleOnTrue(driveRobotOrientedAnglularVelocity);
+    // Start button -> Toggle between field oriented and robot oriented driving
+    m_driverController.options().toggleOnTrue(driveRobotOrientedAnglularVelocity);
 
     // Share button -> Zero gyro
     // NOTE: Command does not work with onTrue()
