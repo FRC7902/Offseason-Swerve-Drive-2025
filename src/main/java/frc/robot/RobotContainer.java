@@ -43,9 +43,6 @@ public class RobotContainer {
       () -> m_driverController.getRightX(),
       () -> m_driverController.getRightY());
 
-      //Not field oriented turning. It just turns. 
-  Command driveFieldOrientedAngularVelocity=m_swerveSubsystem.driveCommand()); 
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
