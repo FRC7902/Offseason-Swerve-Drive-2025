@@ -92,6 +92,8 @@ public class RobotContainer {
 
     // Share button -> Zero gyro
     // NOTE: Command does not work with onTrue()
+    // NOTE: Using this will also switch drive orientation back to default,
+    // regardless if you were previously driving robot or field oriented
     m_driverController.create().whileTrue(m_swerveSubsystem.zeroGyro());
   }
 
