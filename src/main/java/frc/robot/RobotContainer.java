@@ -32,6 +32,12 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
 
+  public Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
+    () -> MathUtil.applyDeadband(m_driverController.getLeftY() * -1, OperatorConstants.LEFT_Y_DEADBAND),
+    () -> MathUtil.applyDeadband(m_driverController.getLeftX() * -1, OperatorConstants.LEFT_X_DEADBAND),
+    () -> m_driverController.getRightX() * -1);
+
+    
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
