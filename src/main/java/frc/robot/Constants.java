@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -19,7 +21,7 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
+  public static final class OperatorConstants {
     public static final int kDriverControllerPort = 0;
 
     // Joystick deadbands
@@ -27,9 +29,15 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND = 0.2;
   }
 
-  public static class DriveConstants {
+  public static final class DriveConstants {
     public static final double MAX_SPEED = Units.feetToMeters(4.5);
     public static final double DRIVE_SPEED_MULTIPLIER = 0.1;
     public static final double TURN_SPEED_MULTIPLIER = 0.1;
+  }
+
+  public static final class AutonConstants {
+    // Ensure that PID values match the values in the YAGSL configuration files
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
   }
 }
