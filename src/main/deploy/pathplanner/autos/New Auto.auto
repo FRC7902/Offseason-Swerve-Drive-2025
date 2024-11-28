@@ -16,6 +16,12 @@
           "data": {
             "pathName": "Example Path"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New Path"
+          }
         }
       ]
     }
