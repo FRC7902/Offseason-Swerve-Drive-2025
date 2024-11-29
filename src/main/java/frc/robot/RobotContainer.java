@@ -32,7 +32,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
 
-  public Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
+  private Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
     () -> MathUtil.applyDeadband(m_driverController.getLeftY() * -1, OperatorConstants.LEFT_Y_DEADBAND),
     () -> MathUtil.applyDeadband(m_driverController.getLeftX() * -1, OperatorConstants.LEFT_X_DEADBAND),
     () -> m_driverController.getRightX() * -1);
@@ -74,7 +74,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     m_swerveSubsystem.setDefaultCommand(
-        driveFieldOrientedDirectAngle);
+        driveFieldOrientedAnglularVelocity);
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
