@@ -58,6 +58,8 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("BR Speed (m/s)", states[3].speedMetersPerSecond);
 
     SwerveModuleState[] states = m_swerveDrive.getStates();
+    SmartDashboard.putNumber("Swerve Yaw", m_swerveDrive.getGyroRotation3d().getZ());
+
     m_moduleStatePublisher.set(states);
   }
 
@@ -68,12 +70,19 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param translationX Translation in the X direction.
    * @param translationY Translation in the Y direction.
    * @param headingX     Heading X to calculate angle of the joystick.
-   * @param headingY     Heading Y to calculate angle of the joystick.
+   * @param headingY     Heading Y to calculate angle of the joystick.s
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
+  
+
+
+   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
       DoubleSupplier headingY) {
+         
     return run(() -> {
+
+      SmartDashboard.putNumber("Target robot angle", Math.atan2(headingX.getAsDouble(), headingY.getAsDouble()));
+
       double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
       double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
       // Make the robot move
