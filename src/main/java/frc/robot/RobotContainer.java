@@ -32,7 +32,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
 
-  private Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
+  public Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
     () -> MathUtil.applyDeadband(m_driverController.getLeftY() *0.1*-1, OperatorConstants.LEFT_Y_DEADBAND),
     () -> MathUtil.applyDeadband(m_driverController.getLeftX() *0.1*-1, OperatorConstants.LEFT_X_DEADBAND),
     () -> m_driverController.getRightX() *0.1*-1);
