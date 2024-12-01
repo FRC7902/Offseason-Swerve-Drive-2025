@@ -33,8 +33,8 @@ public class RobotContainer {
       OperatorConstants.kDriverControllerPort);
 
   public Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
-    () -> MathUtil.applyDeadband(m_driverController.getLeftY() *0.1*-1, OperatorConstants.LEFT_Y_DEADBAND),
-    () -> MathUtil.applyDeadband(m_driverController.getLeftX() *0.1*-1, OperatorConstants.LEFT_X_DEADBAND),
+    () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+    () -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
     () -> m_driverController.getRightX() *0.1*-1);
 
     

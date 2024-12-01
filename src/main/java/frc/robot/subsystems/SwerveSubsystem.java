@@ -41,6 +41,8 @@ public class SwerveSubsystem extends SubsystemBase {
     m_moduleStatePublisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
+    m_swerveDrive.setMaximumSpeed(DriveConstants.MAX_SPEED);
+
   }
 
   @Override
@@ -75,7 +77,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   
 
-
+    // old
    public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
       DoubleSupplier headingY) {
          
@@ -95,6 +97,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
+   * NEW
    * Command to drive the robot using translative values and heading as angular
    * velocity.
    *
@@ -110,8 +113,7 @@ public class SwerveSubsystem extends SubsystemBase {
       m_swerveDrive.drive(
           new Translation2d(
               translationX.getAsDouble() * m_swerveDrive.getMaximumVelocity(),
-              translationY.getAsDouble() * m_swerveDrive
-                  .getMaximumVelocity()),
+              translationY.getAsDouble() * m_swerveDrive.getMaximumVelocity()),
           angularRotationX.getAsDouble() * m_swerveDrive.getMaximumAngularVelocity(),
           true,
           false);
