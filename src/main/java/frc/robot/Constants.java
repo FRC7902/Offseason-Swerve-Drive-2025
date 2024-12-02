@@ -34,7 +34,7 @@ public final class Constants {
   }
 
   public static class AutonConstants {
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.4, 0, 0.01);
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.35, 0.025, 0.01);
     public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
     //THOSE PID VALUES ARE PLACEHOLDERS PLEASE DO NOT USE THEM, acc just changed them but everytime you update pid update here too
     //oil up <- that's 100% vishva bro
