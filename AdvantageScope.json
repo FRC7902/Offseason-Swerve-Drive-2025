@@ -1,0 +1,148 @@
+{
+  "hubs": [
+    {
+      "x": -7,
+      "y": -7,
+      "width": 1454,
+      "height": 914,
+      "state": {
+        "sidebar": {
+          "width": 300,
+          "expanded": [
+            "/SmartDashboard",
+            "/SmartDashboard/Field",
+            "/SmartDashboard/Field/Robot",
+            "/PathPlanner"
+          ]
+        },
+        "tabs": {
+          "selected": 2,
+          "tabs": [
+            {
+              "type": 0,
+              "path": "../docs/INDEX.md"
+            },
+            {
+              "type": 1,
+              "legendHeight": 0.3,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                }
+              },
+              "title": "Line Graph"
+            },
+            {
+              "type": 6,
+              "uuid": "0fi4bv742msi1bu297lokcpy6ti66xs7",
+              "fields": [],
+              "listFields": [
+                [],
+                [
+                  {
+                    "type": "Robot",
+                    "key": "NT:/SmartDashboard/Field/Robot",
+                    "sourceTypeIndex": 0,
+                    "sourceType": 5
+                  },
+                  {
+                    "type": "Green Ghost",
+                    "key": "NT:/PathPlanner/currentPose",
+                    "sourceTypeIndex": 0,
+                    "sourceType": 5
+                  },
+                  {
+                    "type": "Red Ghost",
+                    "key": "NT:/PathPlanner/targetPose",
+                    "sourceTypeIndex": 0,
+                    "sourceType": 5
+                  },
+                  {
+                    "type": "Yellow Ghost",
+                    "key": "NT:/PathPlanner/activePath",
+                    "sourceTypeIndex": 0,
+                    "sourceType": 5
+                  }
+                ]
+              ],
+              "options": {
+                "field": "2024 Field",
+                "alliance": "blue",
+                "robot": "Crab Bot",
+                "unitDistance": "meters",
+                "unitRotation": "degrees"
+              },
+              "configHidden": false,
+              "visualizer": {
+                "cameraIndex": -2,
+                "orbitFov": 50,
+                "cameraPosition": [
+                  -2.0673192549137807,
+                  13.221322815795466,
+                  -1.690100702476354
+                ],
+                "cameraTarget": [
+                  -2.0334286880219006,
+                  -0.5725046265845403,
+                  -1.4471230767359717
+                ]
+              },
+              "title": "3D Field"
+            },
+            {
+              "type": 8,
+              "uuid": "3w6vqq9dfs8zh7memgpmjh1sxo5v6ius",
+              "fields": [],
+              "listFields": [],
+              "options": {
+                "ids": [
+                  0,
+                  1,
+                  2
+                ],
+                "layouts": [
+                  "Logitech F310",
+                  "None",
+                  "None"
+                ]
+              },
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Joysticks"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [
+    {
+      "x": 89,
+      "y": 368,
+      "width": 521,
+      "height": 500,
+      "state": {
+        "type": 8,
+        "visualizer": null
+      },
+      "uuid": "3w6vqq9dfs8zh7memgpmjh1sxo5v6ius"
+    }
+  ],
+  "version": "3.2.1"
+}

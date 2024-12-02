@@ -11,7 +11,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -24,7 +23,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
-
+import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import edu.wpi.first.math.geometry.Pose2d;
 
 import edu.wpi.first.math.Matrix;
@@ -48,13 +48,21 @@ public class SwerveSubsystem extends SubsystemBase {
   SwerveModuleState[] states;
 
   private final StructArrayPublisher<SwerveModuleState> m_moduleStatePublisher;
+  private Pose2d swervePose2D;
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
 
     try {
       File directory = new File(Filesystem.getDeployDirectory(), "swerve");
+      // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
+      // objects being created.
+      SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
       m_swerveDrive = new SwerveParser(directory).createSwerveDrive(DriveConstants.MAX_SPEED);
+      m_swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot
+                                                 // via angle.
+      m_swerveDrive.setCosineCompensator(false); // Disables cosine compensation for simulations since it causes
+                                                 // discrepancies not seen in real life.
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -63,6 +71,9 @@ public class SwerveSubsystem extends SubsystemBase {
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
     m_swerveDrive.setMaximumSpeed(DriveConstants.MAX_SPEED);
+
+    initializePathPlanner();
+
 
   }
 
@@ -83,27 +94,31 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void initializePathPlanner() {
-      AutoBuilder.configureHolonomic(
+    AutoBuilder.configureHolonomic(
         this::getPose, // Provides robot pose (combination of translation and rotation)
         this::resetOdometry, // Resets odometry (runs when auto has a starting pose)
         this::getRobotVelocity, // Provides chassis velocity
-        this::setChassisSpeeds, // Sets robot speed 
+        this::setChassisSpeeds, // Sets robot speed
         new HolonomicPathFollowerConfig(
-          Constants.AutonConstants.TRANSLATION_PID,
-          Constants.AutonConstants.ANGLE_PID,
-          Constants.AutonConstants.MAX_MODULE_SPEED,
-          m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-          new ReplanningConfig()),
-          () -> {
-            var alliance = DriverStation.getAlliance();
-            return (alliance.isPresent()) ? (alliance.get() == DriverStation.Alliance.Red) : (false);},
-            this);
+            Constants.AutonConstants.TRANSLATION_PID,
+            Constants.AutonConstants.ANGLE_PID,
+            Constants.AutonConstants.MAX_MODULE_SPEED,
+            m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+            new ReplanningConfig()),
+        () -> {
+          var alliance = DriverStation.getAlliance();
+          return (alliance.isPresent()) ? (alliance.get() == DriverStation.Alliance.Blue) : (false);
+        },
+        this);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     states = m_swerveDrive.getStates();
+
+    swervePose2D = getPose();
+    
     SmartDashboard.putNumber("FL Angle (deg)", states[0].angle.getDegrees());
     SmartDashboard.putNumber("FR Angle (deg)", states[1].angle.getDegrees());
     SmartDashboard.putNumber("BL Angle (deg)", states[2].angle.getDegrees());
@@ -116,6 +131,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     SwerveModuleState[] states = m_swerveDrive.getStates();
     SmartDashboard.putNumber("Swerve Yaw", m_swerveDrive.getGyroRotation3d().getZ());
+
 
     m_moduleStatePublisher.set(states);
   }
@@ -130,12 +146,11 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param headingY     Heading Y to calculate angle of the joystick.s
    * @return Drive command.
    */
-  
 
-    // old
-   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
+  // old
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
       DoubleSupplier headingY) {
-         
+
     return run(() -> {
 
       SmartDashboard.putNumber("Target robot angle", Math.atan2(headingX.getAsDouble(), headingY.getAsDouble()));
