@@ -39,7 +39,7 @@ public final class Constants {
     //THOSE PID VALUES ARE PLACEHOLDERS PLEASE DO NOT USE THEM, acc just changed them but everytime you update pid update here too
     //oil up <- that's 100% vishva bro
 
-    public static final double MAX_MODULE_SPEED = 5;
+    public static final double MAX_MODULE_SPEED = 1;
     public static final boolean isCompetition = false;
 
   }

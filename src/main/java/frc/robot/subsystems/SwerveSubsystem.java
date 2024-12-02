@@ -62,6 +62,21 @@ public class SwerveSubsystem extends SubsystemBase {
     m_moduleStatePublisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
+        AutoBuilder.configureHolonomic(
+          this::getPose, // Provides robot pose (combination of translation and rotation)
+          this::resetOdometry, // Resets odometry (runs when auto has a starting pose)
+          this::getRobotVelocity, // Provides chassis velocity
+          this::setChassisSpeeds, // Sets robot speed 
+          new HolonomicPathFollowerConfig(
+            Constants.AutonConstants.TRANSLATION_PID,
+            Constants.AutonConstants.ANGLE_PID,
+            Constants.AutonConstants.MAX_MODULE_SPEED,
+            m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+            new ReplanningConfig()),
+            () -> {
+              var alliance = DriverStation.getAlliance();
+              return (alliance.isPresent()) ? (alliance.get() == DriverStation.Alliance.Red) : (false);},
+              this);
   }
 
   public Pose2d getPose() {
@@ -81,21 +96,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void initializePathPlanner() {
-      AutoBuilder.configureHolonomic(
-        this::getPose, // Provides robot pose (combination of translation and rotation)
-        this::resetOdometry, // Resets odometry (runs when auto has a starting pose)
-        this::getRobotVelocity, // Provides chassis velocity
-        this::setChassisSpeeds, // Sets robot speed 
-        new HolonomicPathFollowerConfig(
-          Constants.AutonConstants.TRANSLATION_PID,
-          Constants.AutonConstants.ANGLE_PID,
-          Constants.AutonConstants.MAX_MODULE_SPEED,
-          m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-          new ReplanningConfig()),
-          () -> {
-            var alliance = DriverStation.getAlliance();
-            return (alliance.isPresent()) ? (alliance.get() == DriverStation.Alliance.Red) : (false);},
-            this);
+      
   }
 
   @Override
