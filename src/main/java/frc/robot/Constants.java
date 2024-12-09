@@ -22,14 +22,18 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class OperatorConstants {
+    //Port where controller is connected to
     public static final int kDriverControllerPort = 0;
 
     // Joystick deadbands
+    // Prevents unwanted movement from faulty joysticks that may report an input value when it is not being moved
     public static final double LEFT_X_DEADBAND = 0.1;
     public static final double LEFT_Y_DEADBAND = 0.1;
   }
 
   public static class DriveConstants {
+    // Restricts drive speed to prevent accelerated wear of motors
+    // Lower speed -> more control unless you are lewis hamilton
     public static final double MAX_SPEED = Units.feetToMeters(4.5);
   }
 
@@ -37,11 +41,14 @@ public final class Constants {
     public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.4, 0, 0.01);
     public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
     //THOSE PID VALUES ARE PLACEHOLDERS PLEASE DO NOT USE THEM, acc just changed them but everytime you update pid update here too
-    //oil up <- that's 100% vishva bro
+    //turkish quandale dingle banishes you to pid tuning
 
     public static final double MAX_MODULE_SPEED = 5;
+    
+    //boolean value used for pathplanner to ensure test autonomous paths arent used during comp
+    //set to true if robot will be used in comp
     public static final boolean isCompetition = false;
-
+    
   }
 
 }
