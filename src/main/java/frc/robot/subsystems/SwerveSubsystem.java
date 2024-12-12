@@ -166,7 +166,22 @@ public class SwerveSubsystem extends SubsystemBase {
          
     return run(() -> {
 
-      //trigonometry to find the angle needed to turn towards the target position
+/*
+      Calculates the angle that the robot needs to turn to face its target position
+
+       θ = atan(x / y)    
+
+       x
+      ____ target position           
+     |   /       
+     |  /      
+   y | /
+     |/          
+     θ
+     ^
+     target angle
+*/     
+
       SmartDashboard.putNumber("Target robot angle", Math.atan2(headingX.getAsDouble(), headingY.getAsDouble()));
 
       //inputs are cubed to decrease sensitivity of the joysticks, allowing for a finer control
