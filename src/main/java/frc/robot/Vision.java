@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -41,6 +42,7 @@ import swervelib.SwerveDrive;
 import swervelib.telemetry.Alert;
 import swervelib.telemetry.Alert.AlertType;
 import swervelib.telemetry.SwerveDriveTelemetry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -53,20 +55,20 @@ public class Vision
   /**
    * April Tag Field Layout of the year.
    */
-  public static final AprilTagFieldLayout fieldLayout                     = AprilTagFieldLayout.loadField(
+  public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(
       AprilTagFields.k2024Crescendo);
   /**
    * Photon Vision Simulation
    */
-  public              VisionSystemSim     visionSim;
+  public VisionSystemSim visionSim;
   /**
    * Count of times that the odom thinks we're more than 10meters away from the april tag.
    */
-  private             double              longDistangePoseEstimationCount = 0;
+  private double longDistangePoseEstimationCount = 0;
   /**
    * Current pose from the pose estimator using wheel odometry.
    */
-  private             Supplier<Pose2d>    currentPose;
+  private Supplier<Pose2d> currentPose;
   /**
    * Ambiguity defined as a value between (0,1). Used in {@link Vision#filterPose}.
    */
@@ -74,7 +76,7 @@ public class Vision
   /**
    * Field from {@link swervelib.SwerveDrive#field}
    */
-  private             Field2d             field2d;
+  private Field2d field2d;
 
 
   /**
@@ -467,5 +469,7 @@ public class Vision
       }
     }
   }
-
+   public void periodic() {
+    // This method will be called once per scheduler run
+  }
 }

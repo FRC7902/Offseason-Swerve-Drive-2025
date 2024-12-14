@@ -16,11 +16,16 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Vision;
 import frc.robot.Constants.DriveConstants;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 
 public class SwerveSubsystem extends SubsystemBase {
+
+  private Vision vision;
+
+  private final boolean visionDriveTest = false;
 
   SwerveDrive m_swerveDrive;
 
@@ -40,7 +45,21 @@ public class SwerveSubsystem extends SubsystemBase {
 
     m_moduleStatePublisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+    if (visionDriveTest)
+    {
+      setupPhotonVision();
+      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
+      m_swerveDrive.stopOdometryThread();
+    }
 
+  }
+
+  /**
+   * Setup the photon vision class.
+   */
+  public void setupPhotonVision()
+  {
+    vision = new Vision(m_swerveDrive::getPose, m_swerveDrive.field);
   }
 
   @Override
@@ -59,6 +78,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
     SwerveModuleState[] states = m_swerveDrive.getStates();
     m_moduleStatePublisher.set(states);
+
+    if (visionDriveTest)
+    {
+      m_swerveDrive.updateOdometry();
+      vision.updatePoseEstimation(m_swerveDrive);
+    }
   }
 
   /**
