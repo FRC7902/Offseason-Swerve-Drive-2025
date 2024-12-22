@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SetLED;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -30,8 +31,11 @@ import frc.robot.subsystems.SwerveSubsystem;
  * periodic methods (other than the scheduler calls). Instead, the structure of
  * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
+ *
  */
+
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem();
@@ -40,6 +44,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
+  
+  public static PicoLEDModule m_pico = new PicoLEDModule();
 
   public Command driveFieldOrientedAnglularVelocity = m_swerveSubsystem.driveCommand(
     () -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
@@ -64,6 +70,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    m_pico.threadMain();
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -97,7 +104,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.b().whileTrue(new SetLED(m_pico, 100, 1, 255, 255, 255));
   }
 
   /**
